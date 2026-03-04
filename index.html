@@ -3,248 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aimhead Premium Access</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Aimhead Dashboard | NAMZ Premium Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8a2be2;
-            --accent: #bc13fe;
-            --bg: #050208;
-            --card-bg: #11081a;
-            --text: #ffffff;
-            --text-dim: #948b9b;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --bg-dark: #060608;
+            --card-bg: rgba(15, 15, 20, 0.85);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --success: #10b981;
         }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-image: radial-gradient(circle at top right, #1a0b2e, transparent);
-            overflow: hidden;
-        }
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: 'Inter', sans-serif; color: var(--text-main); overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; top: 0; left: 0; }
 
-        /* --- UI POP-UP LOGIN --- */
-        #login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(5, 2, 8, 0.98);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: 0.5s;
-        }
+        /* --- LOGIN UI --- */
+        #login-overlay { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 100; background: radial-gradient(circle at center, #101015 0%, #030303 100%); transition: 0.6s; }
+        .login-card { width: 100%; max-width: 380px; padding: 50px 40px; background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 28px; border: 1px solid var(--border); text-align: center; position: relative; z-index: 101; }
+        .brand-logo-text { font-family: 'Fira Code', monospace; font-size: 20px; color: var(--primary); background: rgba(99, 102, 241, 0.1); padding: 8px 18px; border-radius: 12px; display: inline-block; margin-bottom: 24px; border: 1px solid rgba(99, 102, 241, 0.2); }
+        .login-input { width: 100%; padding: 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 20px; outline: none; }
+        .login-btn { width: 100%; padding: 16px; background: var(--primary); border: none; border-radius: 14px; color: white; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .login-btn:hover { background: #4f46e5; transform: translateY(-2px); box-shadow: 0 10px 20px var(--primary-glow); }
 
-        .login-card {
-            width: 85%;
-            max-width: 360px;
-            background: linear-gradient(145deg, #160a25, #0d0415);
-            padding: 45px 35px;
-            border-radius: 30px;
-            border: 1px solid rgba(188, 19, 254, 0.4);
-            text-align: center;
-            box-shadow: 0 0 50px rgba(138, 43, 226, 0.25);
-            position: relative;
-        }
-
-        .login-card h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            letter-spacing: 4px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px var(--accent);
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(138, 43, 226, 0.3);
-            border-radius: 15px;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s ease;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px var(--accent);
-        }
-
-        .buy-info {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 12px;
-            color: var(--text-dim);
-        }
-
-        .buy-link {
-            color: #00ffa3;
-            text-decoration: none;
-            font-weight: bold;
-            display: block;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-
-        /* --- MAIN CONTENT (PRO UI) --- */
-        .pro-container {
-            width: 90%;
-            max-width: 400px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-            display: none;
-            position: relative;
-        }
-
-        .header { text-align: center; margin-bottom: 30px; }
-        .badge { font-family: 'Orbitron'; font-size: 10px; color: var(--accent); letter-spacing: 3px; border: 1px solid var(--accent); padding: 4px 12px; border-radius: 50px; display: inline-block; margin-bottom: 10px; text-transform: uppercase; }
-        .brand-title { font-family: 'Orbitron'; font-size: 24px; font-weight: 700; margin: 0; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* --- DASHBOARD UI --- */
+        #main-content { display: none; z-index: 10; width: 100%; max-width: 480px; animation: slideUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); padding: 20px; }
+        .pro-card { background: var(--card-bg); backdrop-filter: blur(20px); padding: 35px; border-radius: 32px; border: 1px solid var(--border); box-shadow: 0 40px 80px rgba(0,0,0,0.7); }
         
-        .info-card { background: rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 15px; display: flex; justify-content: space-around; margin-bottom: 25px; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .info-item { text-align: center; }
-        .info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
-        .info-val { font-size: 14px; font-weight: 600; font-family: 'Orbitron'; }
+        .status-pill { display: inline-flex; align-items: center; gap: 7px; background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 6px 14px; border-radius: 100px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
+        .dashboard-title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; margin: 0 0 25px; font-weight: 700; text-align: center; }
 
-        .btn { display: flex; align-items: center; justify-content: center; padding: 16px; border-radius: 14px; text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 12px; font-size: 14px; }
-        .btn-main { background: #ffffff; color: #000; }
-        .btn-video { background: rgba(138, 43, 226, 0.1); color: var(--accent); border: 1px solid rgba(188, 19, 254, 0.3); }
-
-        .tutor-list { margin-top: 30px; }
-        .step { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 15px; }
-        .step-n { font-family: 'Orbitron'; color: var(--primary); font-size: 14px; font-weight: bold; }
-        .step-txt { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
-
-        .shake { animation: shake 0.4s; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+        /* --- DOWNLOAD AREA (PROFESSIONAL VERSION) --- */
+        .download-console {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
         }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-dim);
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .file-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .file-label { color: var(--text-dim); }
+        .file-value { color: var(--text-main); font-weight: 600; }
+        .file-value.cyan { color: var(--primary); }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 20px;
+            background: #ffffff;
+            color: #000000;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            transition: 0.3s;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 10px 25px var(--primary-glow);
+        }
+
+        .btn-tutorial {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.3s;
+            border: 1px solid transparent;
+            margin-top: 10px;
+        }
+
+        .btn-tutorial:hover { color: var(--text-main); text-decoration: underline; }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 10px;
+            color: var(--success);
+            margin-top: 20px;
+            opacity: 0.8;
+            font-family: 'Fira Code', monospace;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .shake { animation: shake 0.4s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
     </style>
 </head>
 <body>
 
+    <div id="particles-js"></div>
+
     <div id="login-overlay">
         <div class="login-card" id="login-card">
-            <div class="badge">SECURED SYSTEM</div>
-            <h2>VERIFY AIM HEAD ACCESS</h2>
-            <p>Masukkan Key lisensi Anda.</p>
+            <div class="brand-logo-text">NAMZ AIMHEAD ACCESS</div>
+            <h2 style="font-family: 'Space Grotesk'; margin-bottom: 10px;">Secure Login</h2>
+            <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 30px;">Authorized access only. Enter your encrypted key.</p>
+            <input type="text" id="license-key" class="login-input" placeholder="LICENSE KEY" autocomplete="off">
+            <button class="login-btn" onclick="checkLogin()">INITIATE ACCESS</button>
+            <div style="margin-top: 25px; font-size: 12px; color: #555;">Need access? <a href="https://wa.me/6285741193887" style="color: var(--primary); text-decoration: none;">Contact Admin</a></div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="pro-card">
+            <div style="text-align: center;">
+                <div class="status-pill"><div class="status-dot"></div> System Online</div>
+                <h1 class="dashboard-title">AIMHEAD VIP</h1>
+            </div>
+
+            <div class="download-console">
+                <div class="console-header">
+                    <span>FILE_METADATA_V4</span>
+                    <span style="color: var(--success);">SECURE_CONNECTION</span>
+                </div>
+                
+                <div class="file-info-row">
+                    <span class="file-label">Object Name:</span>
+                    <span class="file-value">aimhead_namzvip.zip</span>
+                </div>
+                <div class="file-info-row">
+                    <span class="file-label">Release:</span>
+                    <span class="file-value cyan">Stable Build v4.0.2</span>
+                </div>
+                <div class="file-info-row">
+                    <span class="file-label">Checksum:</span>
+                    <span class="file-value" style="font-size: 10px; font-family: 'Fira Code';">MD5: B4A2...F91C</span>
+                </div>
+                <div class="file-info-row">
+                    <span class="file-label">Server:</span>
+                    <span class="file-value">Edge Optimized (SG)</span>
+                </div>
+
+                <a href="https://www.mediafire.com/file/j670zwoqhzz9hdb/aimhead_namzvip.zip/file" class="btn-download">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    DOWNLOAD APPLICATION
+                </a>
+            </div>
             
-            <input type="text" id="license-key" class="login-input" placeholder="PASTE KEY HERE">
-            <button class="login-btn" onclick="checkLogin()">UNLOCK FILE</button>
+            <a href="https://youtube.com/shorts/f7dUspuQUhA?si=1QI8ZEhHZDTRY5VG" class="btn-tutorial" target="_blank">
+                ▶ WATCH VIDEO TUTORIAL
+            </a>
 
-            <div class="buy-info">
-                Gak punya key? Beli ke saya sekarang:
-                <a href="https://wa.me/6285741193887" class="buy-link" target="_blank">🛒 BELI KEY DISINI</a>
+            <div class="security-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                ENCRYPTED & SCAN-VERIFIED BY NAMZ_
             </div>
         </div>
     </div>
 
-    <div class="pro-container" id="main-content">
-        <div class="header">
-            <div class="badge">Authenticated</div>
-            <h1 class="brand-title">AIMHEAD VIP</h1>
-        </div>
-
-        <div class="info-card">
-            <div class="info-item">
-                <div class="info-label">License</div>
-                <div class="info-val">VVIP</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Status</div>
-                <div class="info-val" style="color: #00ffa3;">ACTIVE</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Duration</div>
-                <div class="info-val">LIFETIME</div>
-            </div>
-        </div>
-
-        <a href="https://www.mediafire.com/file/j670zwoqhzz9hdb/aimhead_namzvip.zip/file" class="btn btn-main">DOWNLOAD APPLICATION</a>
-        <a href="https://youtube.com/shorts/f7dUspuQUhA?si=1QI8ZEhHZDTRY5VG" class="btn btn-video" target="_blank">▶ WATCH VIDEO TUTORIAL</a>
-
-        <div class="tutor-list">
-            <div class="step">
-                <div class="step-n">01</div>
-                <div class="step-txt">Unduh dan instal APK Aimhead melalui tombol di atas.</div>
-            </div>
-            <div class="step">
-                <div class="step-n">02</div>
-                <div class="step-txt">Aktifkan izin "Display over other apps" pada ponsel Anda.</div>
-            </div>
-            <div class="step">
-                <div class="step-n">03</div>
-                <div class="step-txt">Buka game dan aktifkan menu melalui ikon Aimhead.</div>
-            </div>
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#6366f1" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.4, "random": true },
+                "size": { "value": 2 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#6366f1", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
+            }
+        });
+
         function checkLogin() {
-            const keyInput = document.getElementById('license-key').value;
+            const key = document.getElementById('license-key').value;
+            const validKeys = ["AIMHEAD-VIP-01", "NAMZ-HEAD-2026", "KEY-PRO-2026", "ADMIN-ACCESS", "NAMZHEAD", "NAMZ-LIFETIME", "TRIAL-FREE"];
             
-            // --- DAFTAR BANYAK KEY ---
-            const daftarKey = [
-                "AIMHEAD-VIP-01", 
-                "NAMZ-HEAD-2026", 
-                "KEY-PRO-2026", 
-                "ADMIN-ACCESS", 
-                "HEADNAMZ", 
-                "HEAD-LIFETIME", 
-                "TRIAL-FREE"
-            ]; 
-
-            const loginOverlay = document.getElementById('login-overlay');
-            const mainContent = document.getElementById('main-content');
-            const loginCard = document.getElementById('login-card');
-
-            if (daftarKey.includes(keyInput)) {
-                loginOverlay.style.opacity = '0';
+            if (validKeys.includes(key)) {
+                document.getElementById('login-overlay').style.opacity = '0';
                 setTimeout(() => {
-                    loginOverlay.style.display = 'none';
-                    mainContent.style.display = 'block';
-                    document.body.style.overflow = 'auto';
-                }, 500);
+                    document.getElementById('login-overlay').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                }, 600);
             } else {
-                loginCard.classList.add('shake');
-                alert("Key Lisensi Salah! Bro");
-                setTimeout(() => loginCard.classList.remove('shake'), 400);
+                const card = document.getElementById('login-card');
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
             }
         }
     </script>
 </body>
 </html>
-
